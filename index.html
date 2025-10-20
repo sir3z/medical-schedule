@@ -1,0 +1,2737 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="جدول التخصصات المناوبة - التجمع الصحي بالحدود الشمالية">
+    
+    <!-- التوافق مع iframe embedding -->
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://*.hostinger.com https://*.hstgr.io *;">
+    
+    <title>جدول التخصصات المناوبة</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBEe8xcUhmir1czwPivmXQs7lmXHizvwu0",
+            authDomain: "medical-scheduling-syste-6fa11.firebaseapp.com",
+            projectId: "medical-scheduling-syste-6fa11",
+            storageBucket: "medical-scheduling-syste-6fa11.firebasestorage.app",
+            messagingSenderId: "690280941209",
+            appId: "1:690280941209:web:cff406b3010c1c89d59a08",
+            measurementId: "G-S70M87BEY8"
+        };
+        
+        try {
+            const app = initializeApp(firebaseConfig);
+            window.db = getFirestore(app);
+            window.firebaseReady = true;
+            window.fbGetDocs = getDocs;
+            window.fbCollection = collection;
+            console.log('✅ Firebase Connected!');
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                const statusDiv = document.getElementById('firebaseStatus');
+                if (statusDiv) {
+                    statusDiv.style.display = 'flex';
+                    statusDiv.style.background = 'rgba(76,175,80,0.95)';
+                    statusDiv.innerHTML = '<span style="font-size:1.2em">☁️</span><span>متصل</span>';
+                }
+            });
+        } catch(error) {
+            console.error('❌ Firebase Error:', error);
+            window.firebaseReady = false;
+            document.addEventListener('DOMContentLoaded', () => {
+                const statusDiv = document.getElementById('firebaseStatus');
+                if (statusDiv) {
+                    statusDiv.style.display = 'flex';
+                    statusDiv.style.background = 'rgba(244,67,54,0.95)';
+                    statusDiv.innerHTML = '<span>⚠️</span><span>غير متصل</span>';
+                }
+            });
+        }
+    </script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            direction: rtl;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: bounceIn 0.6s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .login-box h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .login-box h2 {
+            color: #764ba2;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+
+        .login-box .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-error {
+            color: #dc3545;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #firebaseStatus {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(76,175,80,0.95);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            font-weight: normal;
+            opacity: 0.95;
+        }
+
+        .toolbar {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .month-selector {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            color: #667eea;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .month-selector:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .month-selector:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #ffa726 50%, #ffb74d 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cloud-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px;
+            border-left: 5px solid #2196F3;
+            box-shadow: 0 4px 15px rgba(33,150,243,0.2);
+            display: none;
+        }
+
+        .cloud-info h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cloud-info p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            overflow-y: auto;
+            padding: 20px;
+            max-width: 100%;
+            max-height: 70vh;
+            position: relative;
+        }
+
+        table {
+            border-collapse: collapse;
+            font-size: 0.9em;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: auto;
+        }
+
+        th, td {
+            padding: 10px 6px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.85em;
+        }
+
+        td.status-cell {
+            min-width: 60px;
+            max-width: 80px;
+            width: 70px;
+        }
+
+        .day-number {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1em;
+            min-width: 60px;
+            max-width: 80px;
+            width: 70px;
+        }
+
+        .day-name {
+            background: #e9ecef;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+            min-width: 60px;
+            max-width: 80px;
+            width: 70px;
+        }
+
+        .row-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center;
+            font-size: 1.1em;
+            min-width: 100%;
+        }
+
+        .specialty-name {
+            min-width: 250px;
+            max-width: 350px;
+            text-align: right;
+            padding-right: 15px;
+        }
+
+        .hospital-name {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .section-title {
+            background: #495057;
+            color: white;
+            font-weight: bold;
+            text-align: right;
+            padding-right: 15px;
+        }
+
+        .specialty-name {
+            background: #f8f9fa;
+            font-weight: 600;
+            text-align: right;
+            padding-right: 15px;
+            color: #495057;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .specialty-name:hover {
+            background: #e9ecef;
+            transform: scale(1.02);
+        }
+
+        .editable-specialty::after {
+            content: "✏️";
+            position: absolute;
+            left: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .editable-specialty:hover::after {
+            opacity: 1;
+        }
+
+        .status-cell {
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .status-cell:hover {
+            background: #e3f2fd;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .status-cell::after {
+            content: "🔄";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .status-cell:hover::after {
+            opacity: 1;
+        }
+
+        .status-not-applicable {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .status-nmt {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .status-not-available {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .status-name {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .friday {
+            background: #fff3cd !important;
+        }
+
+        .saturday {
+            background: #f8d7da !important;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 193, 7, 0.5); }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-body label {
+            display: block;
+            margin-bottom: 10px;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .modal-body input, .modal-body select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .modal-body input:focus, .modal-body select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .quick-value-btn {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .close-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+            color: white;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .doctor-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .doctor-item {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .doctor-item:hover {
+            background: #e3f2fd;
+        }
+
+        .doctor-item:last-child {
+            border-bottom: none;
+        }
+
+        .specialty-info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .email-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .email-option:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+            transform: translateX(-5px);
+        }
+
+        .email-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .upload-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .upload-info h4 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .upload-info ul {
+            margin: 0;
+            padding-right: 20px;
+            color: #495057;
+        }
+
+        .upload-info li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 5px; }
+            .login-box { padding: 25px; width: 95%; }
+            .login-box h1 { font-size: 1.5em; }
+            .login-box h2 { font-size: 1em; }
+            .login-box .icon { font-size: 3em; }
+            .header { padding: 15px 10px; }
+            .header h1 { font-size: 1.3em; margin-bottom: 5px; }
+            .header h2 { font-size: 0.9em; }
+            .logout-btn { top: 10px; left: 10px; padding: 5px 10px; font-size: 0.75em; }
+            .toolbar { padding: 10px; gap: 8px; flex-direction: column; }
+            .month-selector { width: 100%; padding: 12px; font-size: 1em; }
+            .btn { width: 100%; padding: 12px; font-size: 0.95em; justify-content: center; }
+            .table-wrapper { padding: 5px; max-height: 60vh; }
+            table { font-size: 0.7em; }
+            th, td { padding: 8px 4px; font-size: 0.85em; }
+            .specialty-name { min-width: 120px; max-width: 150px; width: 140px; font-size: 0.8em; padding-right: 8px; }
+            .day-number, .day-name, td.status-cell { min-width: 50px; max-width: 70px; width: 60px; font-size: 0.75em; padding: 6px 2px; }
+            .modal-content { width: 95%; margin: 5% auto; max-height: 90vh; overflow-y: auto; }
+            .modal-header { padding: 15px; font-size: 1.1em; }
+            .modal-body { padding: 15px; max-height: 60vh; }
+            .modal-footer { padding: 15px; flex-direction: column; }
+            .modal-footer .btn { width: 100%; margin-bottom: 8px; }
+            .status-cell:hover { transform: none; box-shadow: none; }
+            .specialty-name:hover { transform: none; }
+            .btn:hover { transform: none; }
+            .container { border-radius: 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.1em; }
+            .header h2 { font-size: 0.8em; }
+            .specialty-name { min-width: 100px; max-width: 120px; width: 110px; font-size: 0.7em; }
+            .day-number, .day-name, td.status-cell { min-width: 40px; max-width: 55px; width: 48px; font-size: 0.7em; padding: 5px 2px; }
+            table { font-size: 0.65em; }
+            .logout-btn { padding: 4px 8px; font-size: 0.7em; }
+        }
+
+        @media (max-width: 900px) and (orientation: landscape) {
+            .table-wrapper { max-height: 55vh; }
+            .modal-content { max-height: 85vh; }
+            .modal-body { max-height: 50vh; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="icon">🔐</div>
+            <h1>جدول المناوبات</h1>
+            <h2>التجمع الصحي بالحدود الشمالية</h2>
+            <input type="password" id="passwordInput" class="login-input" placeholder="أدخل الرقم السري" onkeypress="if(event.key==='Enter') login()">
+            <button class="login-btn" onclick="login()">دخول</button>
+            <div class="login-error" id="loginError">❌ الرقم السري غير صحيح</div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
+        <div class="header">
+            <div id="firebaseStatus"></div>
+            <button class="logout-btn" onclick="logout()">🚪 تسجيل خروج</button>
+            <h1>🏥 التجمع الصحي بالحدود الشمالية</h1>
+            <h2 id="headerTitle">جدول التخصصات المناوبة لشهر أكتوبر 2025</h2>
+            <div id="saveStatus" style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;"></div>
+        </div>
+
+        <div class="toolbar">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label style="font-weight: 600; color: #495057;">📅 الشهر:</label>
+                <select id="monthSelector" class="month-selector" onchange="changeMonth()">
+                    <option value="1">يناير 2025</option>
+                    <option value="2">فبراير 2025</option>
+                    <option value="3">مارس 2025</option>
+                    <option value="4">أبريل 2025</option>
+                    <option value="5">مايو 2025</option>
+                    <option value="6">يونيو 2025</option>
+                    <option value="7">يوليو 2025</option>
+                    <option value="8">أغسطس 2025</option>
+                    <option value="9">سبتمبر 2025</option>
+                    <option value="10" selected>أكتوبر 2025</option>
+                    <option value="11">نوفمبر 2025</option>
+                    <option value="12">ديسمبر 2025</option>
+                </select>
+            </div>
+            <button class="btn btn-warning" onclick="loadScheduleFromCloud()">
+                <span>☁️</span>
+                <span>سحب من السحابة</span>
+            </button>
+            <button class="btn btn-info" onclick="showAllSchedules()">
+                <span>📚</span>
+                <span>جميع الجداول</span>
+            </button>
+            <button class="btn btn-upload" onclick="document.getElementById('fileInput').click()">
+                <span>📤</span>
+                <span>رفع جدول</span>
+            </button>
+            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(event)">
+            <button class="btn btn-success" onclick="exportToExcel()">
+                <span>📥</span>
+                <span>تنزيل Excel</span>
+            </button>
+            <button class="btn btn-info" onclick="showEmailModal()">
+                <span>📧</span>
+                <span>إرسال بالبريد</span>
+            </button>
+            <button class="btn btn-primary" onclick="addDoctor()">
+                <span>➕</span>
+                <span>إضافة طبيب</span>
+            </button>
+            <button class="btn btn-primary" onclick="addSpecialty()">
+                <span>🏥</span>
+                <span>إضافة تخصص</span>
+            </button>
+            <button class="btn btn-success" onclick="saveData()" title="حفظ البيانات الحالية">
+                <span>💾</span>
+                <span>حفظ</span>
+            </button>
+            <button class="btn btn-primary" onclick="restoreOriginalSchedule()" title="استعادة الجدول الأصلي الكامل">
+                <span>🔙</span>
+                <span>الجدول الأصلي</span>
+            </button>
+            <button class="btn btn-delete" onclick="clearSavedData()" title="مسح البيانات المحفوظة وإعادة تعيين">
+                <span>🗑️</span>
+                <span>إعادة تعيين</span>
+            </button>
+        </div>
+
+        <div class="cloud-info" id="cloudInfo">
+            <h3>☁️ معلومات السحابة</h3>
+            <p id="cloudInfoText"></p>
+        </div>
+        
+        <div class="table-wrapper">
+            <table id="scheduleTable"></table>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="doctorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">تغيير الطبيب المناوب</div>
+            <div class="modal-body">
+                <div class="specialty-info" id="currentSpecialty"></div>
+                
+                <label>اختر طبيب من القائمة:</label>
+                <div class="doctor-list" id="doctorList"></div>
+                
+                <label>أو أدخل اسم طبيب جديد:</label>
+                <input type="text" id="newDoctorName" placeholder="اسم الطبيب">
+                
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 2px dashed #667eea;">
+                    <label style="font-weight: bold; margin-bottom: 10px; display: block; color: #667eea;">⚡ خيارات سريعة:</label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                        <button type="button" onclick="setQuickValue('Not available')" style="padding: 10px; border: none; border-radius: 8px; background: linear-gradient(135deg, #f5576c 0%, #e94560 100%); color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                            ❌ Not available
+                        </button>
+                        <button type="button" onclick="setQuickValue('NMT')" style="padding: 10px; border: none; border-radius: 8px; background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                            ⚠️ NMT
+                        </button>
+                        <button type="button" onclick="setQuickValue('')" style="padding: 10px; border: none; border-radius: 8px; background: linear-gradient(135deg, #6c757d 0%, #495057 100%); color: white; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                            🗑️ مسح
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 20px; border-right: 4px solid #ffc107;">
+                    <label style="font-weight: bold; margin-bottom: 10px; display: block; color: #856404;">📍 نطاق التطبيق:</label>
+                    
+                    <div style="margin-bottom: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; border-radius: 5px; transition: all 0.3s; background: rgba(255,255,255,0.5);">
+                            <input type="radio" name="applyScope" value="single" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span><strong>📝 خلية واحدة فقط</strong><br><small style="color: #856404;">التخصص الحالي - اليوم الحالي</small></span>
+                        </label>
+                    </div>
+                    
+                    <div style="margin-bottom: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; border-radius: 5px; transition: all 0.3s; background: rgba(255,255,255,0.5);">
+                            <input type="radio" name="applyScope" value="day" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span><strong>📅 كامل اليوم</strong><br><small style="color: #856404;">جميع التخصصات - نفس اليوم</small></span>
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px; border-radius: 5px; transition: all 0.3s; background: rgba(255,255,255,0.5);">
+                            <input type="radio" name="applyScope" value="month" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span><strong>🗓️ كامل الشهر</strong><br><small style="color: #856404;">نفس التخصص - جميع أيام الشهر</small></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إلغاء</button>
+                <button class="btn save-btn" onclick="saveDoctorChange()">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="specialtyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">تعديل اسم التخصص</div>
+            <div class="modal-body">
+                <label>اسم التخصص الجديد:</label>
+                <input type="text" id="specialtyNameInput" placeholder="أدخل اسم التخصص">
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إلغاء</button>
+                <button class="btn save-btn" onclick="saveSpecialtyChange()">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addDoctorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">إضافة طبيب جديد</div>
+            <div class="modal-body">
+                <label>اسم الطبيب:</label>
+                <input type="text" id="addDoctorNameInput" placeholder="أدخل اسم الطبيب">
+                <label>التخصص:</label>
+                <select id="addDoctorSpecialty">
+                    <option value="">اختر التخصص</option>
+                </select>
+                <div style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 5px; font-size: 0.9em;">
+                    💡 سيتم عرض التخصصات التي تحتوي على أطباء فقط
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إلغاء</button>
+                <button class="btn save-btn" onclick="saveNewDoctor()">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addSpecialtyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">🏥 إضافة تخصص جديد</div>
+            <div class="modal-body">
+                <label>اسم التخصص:</label>
+                <input type="text" id="newSpecialtyNameInput" placeholder="مثال: جراحة الأعصاب">
+                <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-right: 4px solid #667eea;">
+                    <strong>ملاحظة:</strong>
+                    <ul style="margin-top: 10px; padding-right: 20px;">
+                        <li>سيتم إضافة التخصص كسطر جديد في الجدول</li>
+                        <li>يمكنك بعدها إضافة الأطباء لهذا التخصص</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إلغاء</button>
+                <button class="btn save-btn" onclick="saveNewSpecialty()">إضافة</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📧 إرسال جدول المناوبات</div>
+            <div class="modal-body">
+                <label>عنوان البريد الإلكتروني:</label>
+                <input type="email" id="recipientEmail" placeholder="example@moh.gov.sa">
+                <label>اختر طريقة الإرسال:</label>
+                <div class="email-option" onclick="selectEmailOption('gmail')">
+                    <input type="radio" name="emailService" value="gmail" id="gmailOption">
+                    <label for="gmailOption" style="cursor: pointer; margin: 0;">
+                        <strong>Gmail</strong> - إرسال عبر جيميل
+                    </label>
+                </div>
+                <div class="email-option" onclick="selectEmailOption('owa')">
+                    <input type="radio" name="emailService" value="owa" id="owaOption">
+                    <label for="owaOption" style="cursor: pointer; margin: 0;">
+                        <strong>OWA</strong> - إرسال عبر بريد وزارة الصحة
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إلغاء</button>
+                <button class="btn save-btn" onclick="sendEmail()">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="uploadOptionsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📤 اختيار نوع المناوب</div>
+            <div class="modal-body">
+                <div class="upload-info">
+                    <h4>✅ تم قراءة الملف بنجاح!</h4>
+                    <ul>
+                        <li>يدعم التخصصات بالعربية والإنجليزية</li>
+                        <li>يتعرف تلقائياً على التواريخ والأيام</li>
+                        <li>يملأ الجدول حسب الشهر الحالي</li>
+                    </ul>
+                </div>
+                <label>اختر نوع المناوب المراد استيراده:</label>
+                <div class="email-option" onclick="selectOnCallType('first')">
+                    <input type="radio" name="onCallType" value="first" id="firstOnCallOption" checked>
+                    <label for="firstOnCallOption" style="cursor: pointer; margin: 0;">
+                        <strong>المناوب الأول</strong> - First on Call
+                    </label>
+                </div>
+                <div class="email-option" onclick="selectOnCallType('second')">
+                    <input type="radio" name="onCallType" value="second" id="secondOnCallOption">
+                    <label for="secondOnCallOption" style="cursor: pointer; margin: 0;">
+                        <strong>المناوب الثاني</strong> - Second on Call
+                    </label>
+                </div>
+                <div class="email-option" onclick="selectOnCallType('both')">
+                    <input type="radio" name="onCallType" value="both" id="bothOnCallOption">
+                    <label for="bothOnCallOption" style="cursor: pointer; margin: 0;">
+                        <strong>كلاهما</strong> - كلا المناوبين (سيتم دمجهم)
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إلغاء</button>
+                <button class="btn save-btn" onclick="processUploadedFile()">استيراد</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="allSchedulesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">📚 جميع الجداول المحفوظة في السحابة</div>
+            <div class="modal-body">
+                <div id="allSchedulesList" style="max-height: 400px; overflow-y: auto;">
+                    <p style="text-align: center; color: #666;">جاري التحميل...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn close-btn" onclick="closeModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_PASSWORD = '1147';
+        
+        function login() {
+            const password = document.getElementById('passwordInput').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            if (password === CORRECT_PASSWORD) {
+                localStorage.setItem('scheduleLogin', 'true');
+                errorDiv.style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                initializeApp();
+            } else {
+                errorDiv.style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                localStorage.removeItem('scheduleLogin');
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedLogin = localStorage.getItem('scheduleLogin');
+            if (savedLogin === 'true') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                initializeApp();
+            }
+        });
+
+        // بيانات التطبيق
+        let data = [];
+        let specialtyDoctors = {};
+        let currentRow = -1;
+        let currentCol = -1;
+        let currentSpecialtyRow = -1;
+        let selectedEmailService = '';
+        let currentMonth = 10;
+        let currentYear = 2025;
+        let uploadedFileData = null;
+        let selectedOnCallType = 'first';
+
+        const monthNames = {
+            1: 'يناير', 2: 'فبراير', 3: 'مارس', 4: 'أبريل',
+            5: 'مايو', 6: 'يونيو', 7: 'يوليو', 8: 'أغسطس',
+            9: 'سبتمبر', 10: 'أكتوبر', 11: 'نوفمبر', 12: 'ديسمبر'
+        };
+
+        const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+
+        const specialtyTranslation = {
+            'urology': 'المسالك البولية',
+            'المسالك البولية': 'المسالك البولية',
+            'cardiology': 'قلب كبار',
+            'أمراض القلب': 'قلب كبار',
+            'neurology': 'امراض مخ وأعصاب باطنية كبار',
+            'orthopedics': 'جراحة العظام',
+            'pediatrics': 'أطفال عام',
+            'general surgery': 'الجراحة العامة',
+            'ent': 'جراحة الأنف والحنجرة والرأس والعنق ( كبار)',
+            'ophthalmology': 'طب وجراحة العيون عام',
+            'internal medicine': 'الامراض الباطنية',
+            'anesthesia': 'التخدير كبار'
+        };
+
+        function initializeApp() {
+            initializeData();
+            const hasLoadedData = loadSavedData();
+            if (!hasLoadedData) {
+                console.log('📋 استخدام الجدول الأصلي');
+            }
+            buildSpecialtyDoctors();
+            buildTable();
+            showSaveStatus();
+        }
+
+        function initializeData() {
+            data = [
+                ["التجمع الصحى بالحدود الشمالية", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+                ["", "الأربعاء", "الخميس", "الجمعة", "السبت", "الاحد", "الاثنين", "الثالاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت", "الاحد", "الاثنين", "الثالاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت", "الاحد", "الاثنين", "الثالاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت", "الاحد", "الاثنين", "الثالاثاء", "الأربعاء", "الخميس", "الجمعة"],
+                ["مستشفى الأمير عبد العزيز بن مساعد بن جلوي ", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص", "مناوب التخصص"],
+                ["التخصصات", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["أطفال عام", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["غدد صماء اطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["مناظير الجهاز الهضمي", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT"],
+                ["مناظير القنوات المرارية", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available"],
+                ["جراحة اطفال", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT"],
+                ["جهاز هضمي اطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض معدية اطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["اعصاب اطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["كلى اطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض استقلابية اطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["قلب أطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["قلب كبار", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB"],
+                ["جراحة الصدر", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT", "NMT"],
+                ["العناية المركزة لحديثي الولاده", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["جراحة الوجه والفكين", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["مركز القلب وحالات القسطرة القلبية", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض القلب", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB", "Reema", "MAHTAB"],
+                ["امراض مخ وأعصاب باطنية كبار", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali", "Mahmed Ali"],
+                ["جراحة الأنف والحنجرة والرأس والعنق (أطفال)", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama", "Saleh", "Usama"],
+                ["جراحة الأنف والحنجرة والرأس والعنق (كبار)", "Mahmoud", "Saleh", "Mahmoud", "saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud", "Saleh", "Mahmoud"],
+                ["جراحة مخ واعصاب كبار", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["جراحة مخ واعصاب أطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["غسيل الكلى", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض الكلى كبار", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical", "Aliaa", "medical"],
+                ["نساء وولادة", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض الدم أطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض الدم كبار", "Rama", "Eiharith", "Eiharith", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama", "Eiharith", "Rama"],
+                ["الجراحة التجميلية والحروق", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["غدد صماء وامراض الاستقلاب كبار", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir", "Bashir"],
+                ["إصابات الأطفال", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["إصابات الكبار", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available", "Not available"],
+                ["الاشعة التداخلية", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["جراحة العظام", "aymen", "abdelkafi", "abdelkafi", "tawfik", "hisham", "tawfik", "hisham", "hisham", "aymen", "abdelkafi", "tawfik", "hisham", "hisham", "aymen", "abdelkafi", "tawfik", "hisham", "hisham", "aymen", "abdelkafi", "tawfik", "hisham", "hisham", "aymen", "abdelkafi", "tawfik", "hisham", "hisham", "aymen", "abdelkafi", "tawfik"],
+                ["جراحة القلب", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["جراحة الاوعية الدموية", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["جراحة الاوعية الدموية الدقيقة (Microvascular)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["وحدة الحروق", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["الجراحة العامة", "RAHMA", "MAGDY", "YASSER", "MARYAM", "Majdi", "MAGDY", "Majdi", "MAGDY", "RAHMA", "MAGDY", "MARYAM", "Majdi", "MAGDY", "RAHMA", "MAGDY", "MARYAM", "Majdi", "MAGDY", "RAHMA", "MAGDY", "MARYAM", "Majdi", "MAGDY", "RAHMA", "MAGDY", "MARYAM", "Majdi", "MAGDY", "RAHMA", "MAGDY", "MARYAM"],
+                ["الامراض الصدرية", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman", "medical", "Eman"],
+                ["الامراض الباطنية", "Amany", "kamel", "Yasser", "Amany", "marzouk", "kamel", "Yasser", "kamel", "Amany", "kamel", "Amany", "marzouk", "kamel", "Amany", "kamel", "Amany", "marzouk", "kamel", "Amany", "kamel", "Amany", "marzouk", "kamel", "Amany", "kamel", "Amany", "marzouk", "kamel", "Amany", "kamel", "Amany"],
+                ["جراحة العمود الفقري", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["امراض معدية كبار", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["stroke unit", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                ["طب وجراحة العيون عام", "Yasser", "Maram", "Ashraf", "Yasser", "Hany", "Maram", "Ashraf", "Maram", "Yasser", "Maram", "Yasser", "Hany", "Maram", "Yasser", "Maram", "Yasser", "Hany", "Maram", "Yasser", "Maram", "Yasser", "Hany", "Maram", "Yasser", "Maram", "Yasser", "Hany", "Maram", "Yasser", "Maram", "Yasser"],
+                ["التخدير كبار", "Haifa", "latifa", "ruiz", "Egra", "Haifa", "latifa", "ruiz", "latifa", "Haifa", "latifa", "Egra", "Haifa", "latifa", "Haifa", "latifa", "Egra", "Haifa", "latifa", "Haifa", "latifa", "Egra", "Haifa", "latifa", "Haifa", "latifa", "Egra", "Haifa", "latifa", "Haifa", "latifa", "Egra"],
+                ["المسالك البولية", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+            ];
+        }
+
+        function getDaysInMonth(month, year) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        function getDayName(day, month, year) {
+            const date = new Date(year, month - 1, day);
+            return dayNames[date.getDay()];
+        }
+
+        function buildSpecialtyDoctors() {
+            specialtyDoctors = {};
+            data.forEach((row, rowIndex) => {
+                if (rowIndex > 3) {
+                    const specialty = row[0];
+                    specialtyDoctors[specialty] = new Set();
+                    row.forEach((cell, colIndex) => {
+                        if (colIndex > 0 && cell && cell.toString().match(/[a-zA-Z]/) && 
+                            cell !== 'not applicable' && cell !== 'NMT' && 
+                            cell !== 'Not available' && cell !== 'مناوب التخصص') {
+                            specialtyDoctors[specialty].add(cell.trim());
+                        }
+                    });
+                    specialtyDoctors[specialty] = Array.from(specialtyDoctors[specialty]).sort();
+                }
+            });
+        }
+
+        function getCellClass(value) {
+            if (!value || value === '') return 'status-cell';
+            const lowerValue = value.toString().toLowerCase();
+            if (lowerValue === 'not applicable') return 'status-cell status-not-applicable';
+            if (lowerValue === 'nmt') return 'status-cell status-nmt';
+            if (lowerValue.includes('not available')) return 'status-cell status-not-available';
+            if (value.toString().match(/[a-zA-Z]/)) return 'status-cell status-name';
+            return 'status-cell';
+        }
+
+        function buildTable() {
+            const table = document.getElementById('scheduleTable');
+            table.innerHTML = '';
+            
+            data.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr');
+                
+                row.forEach((cell, cellIndex) => {
+                    let element;
+                    
+                    if (rowIndex === 0 && cellIndex === 0) {
+                        element = document.createElement('th');
+                        element.className = 'specialty-name';
+                        element.textContent = cell;
+                    } else if (rowIndex === 0) {
+                        element = document.createElement('th');
+                        element.className = 'day-number';
+                        const dayName = data[1][cellIndex];
+                        if (dayName === 'الجمعة') element.classList.add('friday');
+                        if (dayName === 'السبت') element.classList.add('saturday');
+                        element.textContent = cell;
+                    } else if (rowIndex === 1 && cellIndex === 0) {
+                        element = document.createElement('th');
+                        element.className = 'specialty-name';
+                        element.textContent = '';
+                    } else if (rowIndex === 1) {
+                        element = document.createElement('th');
+                        element.className = 'day-name';
+                        if (cell === 'الجمعة') element.classList.add('friday');
+                        if (cell === 'السبت') element.classList.add('saturday');
+                        element.textContent = cell;
+                    } else if (rowIndex === 2 && cellIndex === 0) {
+                        element = document.createElement('th');
+                        element.className = 'hospital-name';
+                        element.textContent = cell;
+                    } else if (rowIndex === 2) {
+                        element = document.createElement('th');
+                        element.className = 'hospital-name';
+                        element.textContent = cell;
+                    } else if (rowIndex === 3 && cellIndex === 0) {
+                        element = document.createElement('th');
+                        element.className = 'section-title';
+                        element.textContent = cell;
+                    } else if (rowIndex === 3) {
+                        element = document.createElement('th');
+                        element.className = 'section-title';
+                        element.textContent = '';
+                    } else if (cellIndex === 0) {
+                        element = document.createElement('th');
+                        element.className = 'specialty-name editable-specialty';
+                        element.onclick = function() {
+                            editSpecialty(rowIndex);
+                        };
+                        element.textContent = cell;
+                    } else {
+                        element = document.createElement('td');
+                        element.className = getCellClass(cell);
+                        const dayName = data[1][cellIndex];
+                        if (dayName === 'الجمعة') element.classList.add('friday');
+                        if (dayName === 'السبت') element.classList.add('saturday');
+                        if (rowIndex > 3) {
+                            element.onclick = function() {
+                                editDoctor(rowIndex, cellIndex);
+                            };
+                        }
+                        element.textContent = cell;
+                    }
+                    
+                    tr.appendChild(element);
+                });
+                
+                table.appendChild(tr);
+            });
+        }
+
+        function editDoctor(row, col) {
+            currentRow = row;
+            currentCol = col;
+            const specialty = data[row][0];
+            const dayName = data[1][col];
+            const dayNumber = data[0][col];
+            document.getElementById('currentSpecialty').textContent = `📋 التخصص: ${specialty} | 📅 اليوم: ${dayName} ${dayNumber}`;
+            
+            const modal = document.getElementById('doctorModal');
+            const doctorList = document.getElementById('doctorList');
+            doctorList.innerHTML = '';
+            const doctors = specialtyDoctors[specialty] || [];
+            if (doctors.length > 0) {
+                doctors.forEach(doctor => {
+                    const div = document.createElement('div');
+                    div.className = 'doctor-item';
+                    div.textContent = doctor;
+                    div.onclick = function() {
+                        document.getElementById('newDoctorName').value = doctor;
+                    };
+                    doctorList.appendChild(div);
+                });
+            } else {
+                const div = document.createElement('div');
+                div.className = 'doctor-item';
+                div.textContent = 'لا يوجد أطباء مسجلين في هذا التخصص';
+                div.style.textAlign = 'center';
+                div.style.color = '#999';
+                div.style.cursor = 'default';
+                doctorList.appendChild(div);
+            }
+            document.getElementById('newDoctorName').value = data[row][col];
+            
+            document.querySelector('input[name="applyScope"][value="single"]').checked = true;
+            
+            modal.style.display = 'block';
+        }
+
+        function saveDoctorChange() {
+            const newName = document.getElementById('newDoctorName').value.trim();
+            const applyScope = document.querySelector('input[name="applyScope"]:checked').value;
+            
+            if (currentRow >= 0 && currentCol >= 0) {
+                let count = 0;
+                let message = '';
+                
+                if (applyScope === 'single') {
+                    data[currentRow][currentCol] = newName;
+                    const specialty = data[currentRow][0];
+                    if (!specialtyDoctors[specialty]) {
+                        specialtyDoctors[specialty] = [];
+                    }
+                    if (newName && !specialtyDoctors[specialty].includes(newName) && 
+                        newName !== 'not applicable' && 
+                        newName !== 'NMT' && 
+                        newName !== 'Not available') {
+                        specialtyDoctors[specialty].push(newName);
+                        specialtyDoctors[specialty].sort();
+                    }
+                    message = `✅ تم التحديث بنجاح!`;
+                    
+                } else if (applyScope === 'day') {
+                    for (let i = 4; i < data.length; i++) {
+                        data[i][currentCol] = newName;
+                        count++;
+                        
+                        const specialty = data[i][0];
+                        if (newName && newName !== 'Not available' && newName !== 'NMT' && newName !== 'not applicable' && newName !== '') {
+                            if (!specialtyDoctors[specialty]) {
+                                specialtyDoctors[specialty] = [];
+                            }
+                            if (!specialtyDoctors[specialty].includes(newName)) {
+                                specialtyDoctors[specialty].push(newName);
+                                specialtyDoctors[specialty].sort();
+                            }
+                        }
+                    }
+                    const displayValue = newName === '' ? 'فارغ' : newName;
+                    message = `✅ تم تطبيق "${displayValue}" على كامل اليوم ${data[1][currentCol]}\n📊 عدد التخصصات: ${count}`;
+                    
+                } else if (applyScope === 'month') {
+                    const specialty = data[currentRow][0];
+                    for (let col = 1; col < data[currentRow].length; col++) {
+                        data[currentRow][col] = newName;
+                        count++;
+                    }
+                    
+                    if (newName && newName !== 'Not available' && newName !== 'NMT' && newName !== 'not applicable' && newName !== '') {
+                        if (!specialtyDoctors[specialty]) {
+                            specialtyDoctors[specialty] = [];
+                        }
+                        if (!specialtyDoctors[specialty].includes(newName)) {
+                            specialtyDoctors[specialty].push(newName);
+                            specialtyDoctors[specialty].sort();
+                        }
+                    }
+                    
+                    const displayValue = newName === '' ? 'فارغ' : newName;
+                    const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+                    message = `✅ تم تطبيق "${displayValue}" على كامل الشهر\n📋 التخصص: ${specialty}\n📅 عدد الأيام: ${daysInMonth}`;
+                }
+                
+                buildTable();
+                closeModal();
+                
+                if (message) {
+                    alert(message);
+                }
+                
+                autoSave();
+            }
+        }
+
+        function setQuickValue(value) {
+            document.getElementById('newDoctorName').value = value;
+            if (value === '' || value === 'Not available' || value === 'NMT') {
+                const radioButtons = document.querySelectorAll('input[name="applyScope"]');
+                radioButtons.forEach(radio => {
+                    if (radio.value !== 'single') {
+                        radio.parentElement.style.animation = 'pulse 0.5s';
+                        setTimeout(() => {
+                            radio.parentElement.style.animation = '';
+                        }, 500);
+                    }
+                });
+            }
+        }
+
+        function editSpecialty(row) {
+            currentSpecialtyRow = row;
+            const specialty = data[row][0];
+            
+            const message = "التخصص: " + specialty + "\n\n" +
+                           "اختر ماذا تريد أن تفعل:\n\n" +
+                           "1 - تعديل اسم التخصص\n" +
+                           "2 - تحميل بيانات من السحابة\n\n" +
+                           "أدخل رقم الخيار (1 أو 2):";
+            
+            const choice = prompt(message);
+            
+            if (choice === '1') {
+                const modal = document.getElementById('specialtyModal');
+                document.getElementById('specialtyNameInput').value = specialty;
+                modal.style.display = 'block';
+            } else if (choice === '2') {
+                loadCloudDataForSpecialty(row, specialty);
+            }
+        }
+
+        function saveSpecialtyChange() {
+            const newName = document.getElementById('specialtyNameInput').value.trim();
+            if (newName && currentSpecialtyRow >= 0) {
+                const oldName = data[currentSpecialtyRow][0];
+                data[currentSpecialtyRow][0] = newName;
+                if (specialtyDoctors[oldName]) {
+                    specialtyDoctors[newName] = specialtyDoctors[oldName];
+                    delete specialtyDoctors[oldName];
+                }
+                buildTable();
+                closeModal();
+                autoSave();
+            }
+        }
+
+        function addDoctor() {
+            const modal = document.getElementById('addDoctorModal');
+            const select = document.getElementById('addDoctorSpecialty');
+            select.innerHTML = '<option value="">اختر التخصص</option>';
+            const specialtiesWithDoctors = [];
+            data.forEach((row, index) => {
+                if (index > 3) {
+                    const specialty = row[0];
+                    if (specialtyDoctors[specialty] && specialtyDoctors[specialty].length > 0) {
+                        specialtiesWithDoctors.push(specialty);
+                    }
+                }
+            });
+            if (specialtiesWithDoctors.length === 0) {
+                data.forEach((row, index) => {
+                    if (index > 3) {
+                        const option = document.createElement('option');
+                        option.value = row[0];
+                        option.textContent = row[0];
+                        select.appendChild(option);
+                    }
+                });
+            } else {
+                specialtiesWithDoctors.forEach(specialty => {
+                    const option = document.createElement('option');
+                    option.value = specialty;
+                    option.textContent = `${specialty} (${specialtyDoctors[specialty].length} طبيب)`;
+                    select.appendChild(option);
+                });
+            }
+            document.getElementById('addDoctorNameInput').value = '';
+            modal.style.display = 'block';
+        }
+
+        function saveNewDoctor() {
+            const name = document.getElementById('addDoctorNameInput').value.trim();
+            const specialty = document.getElementById('addDoctorSpecialty').value;
+            if (name && specialty) {
+                if (!specialtyDoctors[specialty]) {
+                    specialtyDoctors[specialty] = [];
+                }
+                if (!specialtyDoctors[specialty].includes(name)) {
+                    specialtyDoctors[specialty].push(name);
+                    specialtyDoctors[specialty].sort();
+                    autoSave();
+                    alert('تم إضافة الطبيب: ' + name + '\nإلى تخصص: ' + specialty);
+                    closeModal();
+                } else {
+                    alert('الطبيب موجود بالفعل في هذا التخصص');
+                }
+            } else {
+                alert('يرجى إدخال اسم الطبيب واختيار التخصص');
+            }
+        }
+
+        function addSpecialty() {
+            const modal = document.getElementById('addSpecialtyModal');
+            document.getElementById('newSpecialtyNameInput').value = '';
+            modal.style.display = 'block';
+        }
+
+        function saveNewSpecialty() {
+            const specialtyName = document.getElementById('newSpecialtyNameInput').value.trim();
+            if (!specialtyName) {
+                alert('يرجى إدخال اسم التخصص');
+                return;
+            }
+            let exists = false;
+            for (let i = 4; i < data.length; i++) {
+                if (data[i][0].toLowerCase().trim() === specialtyName.toLowerCase().trim()) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (exists) {
+                alert('هذا التخصص موجود مسبقاً في الجدول');
+                return;
+            }
+            const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+            const newRow = [specialtyName];
+            for (let i = 0; i < daysInMonth; i++) {
+                newRow.push('');
+            }
+            data.push(newRow);
+            specialtyDoctors[specialtyName] = [];
+            buildTable();
+            closeModal();
+            autoSave();
+            alert(`✅ تم إضافة تخصص: ${specialtyName}\nيمكنك الآن إضافة أطباء لهذا التخصص`);
+        }
+
+        function closeModal() {
+            document.getElementById('doctorModal').style.display = 'none';
+            document.getElementById('specialtyModal').style.display = 'none';
+            document.getElementById('addDoctorModal').style.display = 'none';
+            document.getElementById('addSpecialtyModal').style.display = 'none';
+            document.getElementById('emailModal').style.display = 'none';
+            document.getElementById('uploadOptionsModal').style.display = 'none';
+            document.getElementById('allSchedulesModal').style.display = 'none';
+            currentRow = -1;
+            currentCol = -1;
+            currentSpecialtyRow = -1;
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
+        }
+
+        function changeMonth() {
+            const monthSelector = document.getElementById('monthSelector');
+            currentMonth = parseInt(monthSelector.value);
+            const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+            data[0] = ["التجمع الصحى بالحدود الشمالية"];
+            for (let i = 1; i <= daysInMonth; i++) {
+                data[0].push(i);
+            }
+            data[1] = [""];
+            for (let i = 1; i <= daysInMonth; i++) {
+                data[1].push(getDayName(i, currentMonth, currentYear));
+            }
+            data[2] = ["مستشفى الأمير عبد العزيز بن مساعد بن جلوي "];
+            for (let i = 1; i <= daysInMonth; i++) {
+                data[2].push("مناوب التخصص");
+            }
+            for (let rowIndex = 4; rowIndex < data.length; rowIndex++) {
+                const currentRowLength = data[rowIndex].length - 1;
+                if (currentRowLength < daysInMonth) {
+                    for (let i = currentRowLength; i < daysInMonth; i++) {
+                        data[rowIndex].push("");
+                    }
+                } else if (currentRowLength > daysInMonth) {
+                    data[rowIndex] = data[rowIndex].slice(0, daysInMonth + 1);
+                }
+            }
+            document.getElementById('headerTitle').textContent = 
+                `جدول التخصصات المناوبة لشهر ${monthNames[currentMonth]} ${currentYear}`;
+            buildTable();
+            autoSave();
+        }
+
+        async function exportToExcel() {
+            const excelData = JSON.parse(JSON.stringify(data));
+            
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('جدول المناوبات');
+            
+            worksheet.addRows(excelData);
+            
+            worksheet.mergeCells('A1:A2');
+            
+            const borderStyle = {
+                top: { style: 'thin', color: { argb: 'FF000000' } },
+                left: { style: 'thin', color: { argb: 'FF000000' } },
+                bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                right: { style: 'thin', color: { argb: 'FF000000' } }
+            };
+            
+            for (let col = 1; col <= excelData[0].length; col++) {
+                const cell1 = worksheet.getCell(1, col);
+                cell1.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FF1F4E78' }
+                };
+                cell1.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+                cell1.alignment = { horizontal: 'center', vertical: 'middle' };
+                cell1.border = borderStyle;
+                
+                const cell2 = worksheet.getCell(2, col);
+                cell2.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FF1F4E78' }
+                };
+                cell2.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+                cell2.alignment = { horizontal: 'center', vertical: 'middle' };
+                cell2.border = borderStyle;
+            }
+            
+            for (let col = 1; col <= excelData[0].length; col++) {
+                const cell3 = worksheet.getCell(3, col);
+                
+                if (col === 1) {
+                    cell3.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFFFFFFF' }
+                    };
+                    cell3.font = { color: { argb: 'FF000000' }, bold: true };
+                    cell3.alignment = { horizontal: 'right', vertical: 'middle' };
+                } else {
+                    cell3.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FF000000' }
+                    };
+                    cell3.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+                    cell3.alignment = { horizontal: 'center', vertical: 'middle' };
+                }
+                
+                cell3.border = borderStyle;
+            }
+            
+            for (let col = 1; col <= excelData[0].length; col++) {
+                const cell4 = worksheet.getCell(4, col);
+                cell4.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FF7F7F7F' }
+                };
+                cell4.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+                cell4.alignment = { horizontal: 'center', vertical: 'middle' };
+                cell4.border = borderStyle;
+            }
+            
+            for (let row = 5; row <= excelData.length; row++) {
+                for (let col = 1; col <= excelData[0].length; col++) {
+                    const cell = worksheet.getCell(row, col);
+                    
+                    if (col === 1) {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FFB4C7E7' }
+                        };
+                        cell.font = { bold: true };
+                        cell.alignment = { horizontal: 'right', vertical: 'middle' };
+                    } else {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FFD9D9D9' }
+                        };
+                        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    }
+                    
+                    cell.border = borderStyle;
+                }
+            }
+            
+            worksheet.getColumn(1).width = 35;
+            for (let col = 2; col <= excelData[0].length; col++) {
+                worksheet.getColumn(col).width = 12;
+            }
+            
+            worksheet.views = [
+                { state: 'frozen', xSplit: 1, ySplit: 4 }
+            ];
+            
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `جدول_التخصصات_المناوبة_${monthNames[currentMonth]}_${currentYear}.xlsx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showEmailModal() {
+            const modal = document.getElementById('emailModal');
+            modal.querySelector('.modal-header').textContent = 
+                `📧 إرسال جدول مناوبات ${monthNames[currentMonth]} ${currentYear}`;
+            modal.style.display = 'block';
+            document.getElementById('recipientEmail').value = '';
+            selectedEmailService = '';
+            document.querySelectorAll('input[name="emailService"]').forEach(radio => {
+                radio.checked = false;
+            });
+        }
+
+        function selectEmailOption(service) {
+            selectedEmailService = service;
+            document.getElementById(service + 'Option').checked = true;
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('recipientEmail').value.trim();
+            if (!email) {
+                alert('يرجى إدخال عنوان البريد الإلكتروني');
+                return;
+            }
+            if (!selectedEmailService) {
+                alert('يرجى اختيار طريقة الإرسال');
+                return;
+            }
+            const subject = encodeURIComponent(`جدول التخصصات المناوبة لشهر ${monthNames[currentMonth]} ${currentYear}`);
+            const body = encodeURIComponent(`مرفق جدول التخصصات المناوبة لشهر ${monthNames[currentMonth]} ${currentYear}.\n\nيرجى مراجعة الجدول المرفق.`);
+            let mailtoUrl = '';
+            if (selectedEmailService === 'gmail') {
+                mailtoUrl = `https://mail.google.com/mail/?view=cm&to=${email}&su=${subject}&body=${body}`;
+            } else if (selectedEmailService === 'owa') {
+                mailtoUrl = `https://owa.moh.gov.sa/owa/?ae=Item&t=IPM.Note&a=New&to=${email}&subject=${subject}&body=${body}`;
+            }
+            window.open(mailtoUrl, '_blank');
+            closeModal();
+        }
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const fileName = file.name.toLowerCase();
+            try {
+                if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+                    await handleExcelUpload(file);
+                } else if (fileName.endsWith('.csv')) {
+                    await handleCSVUpload(file);
+                }
+            } catch (error) {
+                alert('خطأ في قراءة الملف: ' + error.message);
+                console.error(error);
+            }
+            event.target.value = '';
+        }
+
+        async function handleExcelUpload(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer);
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '' });
+            uploadedFileData = jsonData;
+            document.getElementById('uploadOptionsModal').style.display = 'block';
+        }
+
+        async function handleCSVUpload(file) {
+            const text = await file.text();
+            const lines = text.split('\n');
+            const jsonData = lines.map(line => {
+                const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+                return line.split(regex).map(cell => cell.replace(/^"|"$/g, '').trim());
+            });
+            uploadedFileData = jsonData;
+            document.getElementById('uploadOptionsModal').style.display = 'block';
+        }
+
+        function selectOnCallType(type) {
+            selectedOnCallType = type;
+            document.getElementById(type === 'first' ? 'firstOnCallOption' : 
+                                   type === 'second' ? 'secondOnCallOption' : 
+                                   'bothOnCallOption').checked = true;
+        }
+
+        function processUploadedFile() {
+            if (!uploadedFileData) {
+                alert('لا يوجد بيانات للاستيراد');
+                return;
+            }
+            let headerRow = -1;
+            let dayCol = -1, dateCol = -1, specialtyCol = -1, firstOnCallCol = -1, secondOnCallCol = -1;
+            for (let i = 0; i < Math.min(5, uploadedFileData.length); i++) {
+                const row = uploadedFileData[i];
+                for (let j = 0; j < row.length; j++) {
+                    const cell = row[j].toString().toLowerCase().trim();
+                    if (cell.includes('يوم') || cell.includes('day')) dayCol = j;
+                    if (cell.includes('تاريخ') || cell.includes('date')) dateCol = j;
+                    if (cell.includes('تخصص') || cell.includes('specialty') || cell.includes('department')) specialtyCol = j;
+                    if (cell.includes('مناوب الأول') || cell.includes('first') || cell.includes('المناوب الاول')) firstOnCallCol = j;
+                    if (cell.includes('مناوب الثاني') || cell.includes('second') || cell.includes('المناوب الثاني')) secondOnCallCol = j;
+                }
+                if (specialtyCol !== -1 && (firstOnCallCol !== -1 || secondOnCallCol !== -1)) {
+                    headerRow = i;
+                    break;
+                }
+            }
+            if (headerRow === -1) {
+                alert('لم يتم العثور على هيكل الجدول المتوقع');
+                return;
+            }
+            const scheduleData = {};
+            for (let i = headerRow + 1; i < uploadedFileData.length; i++) {
+                const row = uploadedFileData[i];
+                if (!row || row.length === 0 || !row[specialtyCol]) continue;
+                const specialty = normalizeSpecialty(row[specialtyCol].toString().trim());
+                const date = dateCol !== -1 ? row[dateCol] : '';
+                let dayNumber = -1;
+                if (date) {
+                    const dateMatch = date.toString().match(/\d{4}-(\d{2})-(\d{2})/);
+                    if (dateMatch) {
+                        const month = parseInt(dateMatch[1]);
+                        const day = parseInt(dateMatch[2]);
+                        if (month === currentMonth) {
+                            dayNumber = day;
+                        }
+                    }
+                }
+                if (dayNumber === -1) continue;
+                let doctorName = '';
+                if (selectedOnCallType === 'first' && firstOnCallCol !== -1) {
+                    doctorName = row[firstOnCallCol] ? row[firstOnCallCol].toString().trim() : '';
+                } else if (selectedOnCallType === 'second' && secondOnCallCol !== -1) {
+                    doctorName = row[secondOnCallCol] ? row[secondOnCallCol].toString().trim() : '';
+                } else if (selectedOnCallType === 'both') {
+                    const first = firstOnCallCol !== -1 && row[firstOnCallCol] ? row[firstOnCallCol].toString().trim() : '';
+                    const second = secondOnCallCol !== -1 && row[secondOnCallCol] ? row[secondOnCallCol].toString().trim() : '';
+                    doctorName = first && second ? `${first} / ${second}` : (first || second);
+                }
+                if (!scheduleData[specialty]) {
+                    scheduleData[specialty] = {};
+                }
+                scheduleData[specialty][dayNumber] = doctorName;
+            }
+            fillScheduleTable(scheduleData);
+            closeModal();
+            uploadedFileData = null;
+            autoSave();
+            alert('تم استيراد البيانات بنجاح! ✅\n💾 تم حفظ البيانات تلقائياً');
+        }
+
+        function normalizeSpecialty(specialty) {
+            const lower = specialty.toLowerCase().trim();
+            if (specialtyTranslation[lower]) {
+                return specialtyTranslation[lower];
+            }
+            for (let i = 4; i < data.length; i++) {
+                const existingSpecialty = data[i][0].toLowerCase().trim();
+                if (existingSpecialty === lower || 
+                    existingSpecialty.includes(lower) || 
+                    lower.includes(existingSpecialty)) {
+                    return data[i][0];
+                }
+            }
+            return specialty;
+        }
+
+        function fillScheduleTable(scheduleData) {
+            for (const specialty in scheduleData) {
+                let specialtyRowIndex = -1;
+                for (let i = 4; i < data.length; i++) {
+                    if (data[i][0].toLowerCase().trim() === specialty.toLowerCase().trim()) {
+                        specialtyRowIndex = i;
+                        break;
+                    }
+                }
+                if (specialtyRowIndex === -1) {
+                    const newRow = [specialty];
+                    for (let i = 1; i <= 31; i++) {
+                        newRow.push('');
+                    }
+                    data.push(newRow);
+                    specialtyRowIndex = data.length - 1;
+                }
+                const dayData = scheduleData[specialty];
+                for (const day in dayData) {
+                    const dayIndex = parseInt(day);
+                    if (dayIndex >= 1 && dayIndex <= data[0].length - 1) {
+                        data[specialtyRowIndex][dayIndex] = dayData[day];
+                        if (!specialtyDoctors[specialty]) {
+                            specialtyDoctors[specialty] = [];
+                        }
+                        const doctorName = dayData[day];
+                        if (doctorName && !specialtyDoctors[specialty].includes(doctorName) &&
+                            doctorName !== 'not applicable' && doctorName !== 'NMT' && 
+                            doctorName !== 'Not available') {
+                            specialtyDoctors[specialty].push(doctorName);
+                            specialtyDoctors[specialty].sort();
+                        }
+                    }
+                }
+            }
+            buildTable();
+            autoSave();
+        }
+
+        function restoreOriginalSchedule() {
+            if (confirm('📋 هل تريد استعادة الجدول الأصلي؟\n\nسيتم إرجاع جميع التخصصات العربية وحذف أي بيانات محفوظة.')) {
+                localStorage.removeItem('scheduleData');
+                initializeData();
+                buildSpecialtyDoctors();
+                buildTable();
+                const statusDiv = document.getElementById('saveStatus');
+                if (statusDiv) {
+                    statusDiv.textContent = '✅ تم استعادة الجدول الأصلي';
+                    statusDiv.style.color = '#4caf50';
+                }
+                alert('✅ تم استعادة الجدول الأصلي بنجاح!\n\nجميع التخصصات العربية موجودة الآن.');
+            }
+        }
+
+        function analyzeDataStructure(data) {
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('🔍 تحليل شامل لهيكل البيانات');
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('1️⃣ نوع البيانات:', typeof data);
+            console.log('2️⃣ هل هي Array؟', Array.isArray(data));
+            console.log('3️⃣ عدد العناصر:', data ? data.length : 0);
+            if (data && data.length > 0) {
+                console.log('\n📦 تحليل أول 3 عناصر:');
+                for (let i = 0; i < Math.min(3, data.length); i++) {
+                    console.log(`\n[${i}] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+                    console.log('النوع:', typeof data[i]);
+                    console.log('الهيكل الكامل:');
+                    console.log(JSON.stringify(data[i], null, 2));
+                    if (typeof data[i] === 'object' && !Array.isArray(data[i])) {
+                        console.log('المفاتيح:', Object.keys(data[i]));
+                        if (data[i].cells) {
+                            console.log('تفاصيل cells:');
+                            if (Array.isArray(data[i].cells)) {
+                                console.log('  - عدد الخلايا:', data[i].cells.length);
+                                console.log('  - أول خلية:', data[i].cells[0]);
+                                console.log('  - نوع أول خلية:', typeof data[i].cells[0]);
+                            }
+                        }
+                    }
+                }
+                if (typeof data[0] === 'object' && !Array.isArray(data[0])) {
+                    const allKeys = new Set();
+                    data.forEach(item => {
+                        if (item && typeof item === 'object') {
+                            Object.keys(item).forEach(key => allKeys.add(key));
+                        }
+                    });
+                    console.log('\n🔑 جميع المفاتيح الموجودة:');
+                    console.log(Array.from(allKeys).sort());
+                }
+            }
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+        }
+
+        function convertVerticalToHorizontal(verticalData, scheduleInfo) {
+            try {
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                console.log('🔄 بدء تحويل البيانات من السحابة');
+                console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                analyzeDataStructure(verticalData);
+                if (!verticalData) {
+                    throw new Error('❌ البيانات غير موجودة (null/undefined)');
+                }
+                if (!Array.isArray(verticalData)) {
+                    console.log('⚠️ البيانات ليست Array، محاولة التحويل...');
+                    if (typeof verticalData === 'object') {
+                        verticalData = Object.values(verticalData);
+                    } else {
+                        throw new Error('❌ البيانات بصيغة غير مدعومة: ' + typeof verticalData);
+                    }
+                }
+                if (verticalData.length === 0) {
+                    throw new Error('❌ البيانات فارغة (length = 0)');
+                }
+                const firstItem = verticalData[0];
+                if (typeof firstItem === 'object' && !Array.isArray(firstItem) && firstItem !== null) {
+                    console.log('➡️ نوع البيانات: Objects');
+                    return convertObjectsToHorizontal(verticalData);
+                } else if (Array.isArray(firstItem)) {
+                    console.log('➡️ نوع البيانات: Arrays');
+                    return convertArraysToHorizontal(verticalData);
+                } else {
+                    throw new Error('❌ نوع البيانات غير مدعوم: ' + typeof firstItem);
+                }
+            } catch (error) {
+                console.error('❌ خطأ في convertVerticalToHorizontal:', error.message);
+                throw error;
+            }
+        }
+
+        function convertObjectsToHorizontal(objectData) {
+            console.log('🔄 تحويل Objects إلى صيغة عرضية...');
+            const allKeys = new Set();
+            objectData.forEach(item => {
+                if (item && typeof item === 'object') {
+                    Object.keys(item).forEach(key => allKeys.add(key));
+                }
+            });
+            console.log('🔑 جميع المفاتيح المتاحة:', Array.from(allKeys));
+            if (allKeys.has('cells') || allKeys.has('html')) {
+                console.log('🎯 اكتشاف تنسيق Cells - استخدام معالج خاص');
+                return convertCellsFormatToHorizontal(objectData);
+            }
+            const specialtyFields = [
+                'specialty', 'التخصص', 'department', 'specialtyName', 'تخصص',
+                'Specialty', 'SPECIALTY', 'spec', 'dept'
+            ];
+            const dateFields = [
+                'date', 'التاريخ', 'dateValue', 'تاريخ', 'Date', 'DATE',
+                'day', 'اليوم', 'dayNumber', 'رقم_اليوم'
+            ];
+            const doctorFields = [
+                'firstOnCall', 'المناوب الأول', 'المناوب الاول', 'المناوب_الاول',
+                'doctor', 'المناوب', 'oncall', 'on_call', 'first_on_call',
+                'doctorName', 'اسم_الطبيب', 'physician', 'الطبيب'
+            ];
+            let specialtyKey = null, dateKey = null, doctorKey = null;
+            for (const key of allKeys) {
+                const lowerKey = key.toLowerCase();
+                if (!specialtyKey && specialtyFields.some(f => lowerKey.includes(f.toLowerCase()))) {
+                    specialtyKey = key;
+                }
+                if (!dateKey && dateFields.some(f => lowerKey.includes(f.toLowerCase()))) {
+                    dateKey = key;
+                }
+                if (!doctorKey && doctorFields.some(f => lowerKey.includes(f.toLowerCase()))) {
+                    doctorKey = key;
+                }
+            }
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('🎯 الحقول المكتشفة:');
+            console.log('   - التخصص:', specialtyKey || '❌ غير موجود');
+            console.log('   - التاريخ:', dateKey || '❌ غير موجود');
+            console.log('   - المناوب:', doctorKey || '❌ غير موجود');
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            if (!specialtyKey) {
+                throw new Error(`❌ لم يتم العثور على حقل التخصص\n\nالمفاتيح المتاحة:\n${Array.from(allKeys).join(', ')}`);
+            }
+            if (!doctorKey) {
+                throw new Error(`❌ لم يتم العثور على حقل المناوب\n\nالمفاتيح المتاحة:\n${Array.from(allKeys).join(', ')}`);
+            }
+            const specialtySchedules = {};
+            let processedRows = 0;
+            let skippedRows = 0;
+            for (let i = 0; i < objectData.length; i++) {
+                const row = objectData[i];
+                let specialty = row[specialtyKey] ? row[specialtyKey].toString().trim() : '';
+                if (!specialty) {
+                    skippedRows++;
+                    continue;
+                }
+                specialty = normalizeSpecialty(specialty);
+                let dayNumber = -1;
+                if (dateKey) {
+                    const dateValue = row[dateKey] ? row[dateKey].toString().trim() : '';
+                    dayNumber = extractDayFromDate(dateValue);
+                }
+                if (dayNumber === -1) {
+                    for (const key in row) {
+                        if (key === specialtyKey || key === doctorKey) continue;
+                        const value = row[key];
+                        if (typeof value === 'number' && value >= 1 && value <= 31) {
+                            dayNumber = value;
+                            break;
+                        }
+                    }
+                }
+                if (dayNumber === -1) {
+                    skippedRows++;
+                    continue;
+                }
+                const doctorName = row[doctorKey] ? row[doctorKey].toString().trim() : '';
+                if (!specialtySchedules[specialty]) {
+                    specialtySchedules[specialty] = {};
+                }
+                specialtySchedules[specialty][dayNumber] = doctorName;
+                processedRows++;
+                if (processedRows <= 5) {
+                    console.log(`✅ صف ${i}: ${specialty} - يوم ${dayNumber} - ${doctorName || '(فارغ)'}`);
+                }
+            }
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('📊 ملخص المعالجة:');
+            console.log('   - صفوف معالجة: ' + processedRows);
+            console.log('   - صفوف متجاهلة: ' + skippedRows);
+            console.log('   - تخصصات: ' + Object.keys(specialtySchedules).length);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            if (Object.keys(specialtySchedules).length === 0) {
+                throw new Error(`❌ لم يتم العثور على بيانات صالحة`);
+            }
+            return convertSchedulesToHorizontal(specialtySchedules);
+        }
+
+        function convertCellsFormatToHorizontal(objectData) {
+            console.log('🔄 تحويل تنسيق Cells إلى صيغة عرضية...');
+            console.log('📦 إجمالي الصفوف:', objectData.length);
+            if (objectData.length > 0 && objectData[0].cells) {
+                console.log('📋 عينة من البيانات:');
+                console.log('   الصف الأول:', objectData[0].cells);
+            }
+            const specialtySchedules = {};
+            let processedRows = 0;
+            let skippedRows = 0;
+            for (let i = 0; i < objectData.length; i++) {
+                const row = objectData[i];
+                if (!row.cells || !Array.isArray(row.cells) || row.cells.length < 4) {
+                    skippedRows++;
+                    continue;
+                }
+                const cells = row.cells;
+                const dayName = cells[0] || '';
+                const dateStr = cells[1] || '';
+                const specialty = cells[2] || '';
+                const doctorName = cells[3] || '';
+                if (!specialty || !dateStr) {
+                    skippedRows++;
+                    continue;
+                }
+                const dayNumber = extractDayFromDate(dateStr);
+                if (dayNumber === -1) {
+                    console.log(`⚠️ صف ${i}: لم يتم استخراج رقم اليوم من "${dateStr}"`);
+                    skippedRows++;
+                    continue;
+                }
+                const normalizedSpecialty = normalizeSpecialty(specialty);
+                if (!specialtySchedules[normalizedSpecialty]) {
+                    specialtySchedules[normalizedSpecialty] = {};
+                }
+                specialtySchedules[normalizedSpecialty][dayNumber] = doctorName;
+                processedRows++;
+                if (processedRows <= 5) {
+                    console.log(`✅ صف ${i}: ${normalizedSpecialty} - يوم ${dayNumber} (${dateStr}) - ${doctorName || '(فارغ)'}`);
+                }
+            }
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('📊 ملخص المعالجة:');
+            console.log('   - صفوف معالجة: ' + processedRows);
+            console.log('   - صفوف متجاهلة: ' + skippedRows);
+            console.log('   - تخصصات: ' + Object.keys(specialtySchedules).length);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            if (Object.keys(specialtySchedules).length === 0) {
+                throw new Error(`❌ لم يتم العثور على بيانات صالحة\nتم معالجة ${objectData.length} صف`);
+            }
+            return convertSchedulesToHorizontal(specialtySchedules);
+        }
+
+        function convertArraysToHorizontal(arrayData) {
+            console.log('🔄 تحويل Arrays إلى صيغة عرضية...');
+            let headerRow = -1;
+            let specialtyCol = -1, dateCol = -1, doctorCol = -1;
+            const specialtyKeywords = ['تخصص', 'specialty', 'department'];
+            const dateKeywords = ['تاريخ', 'date', 'يوم'];
+            const doctorKeywords = ['مناوب', 'doctor', 'oncall', 'first'];
+            for (let i = 0; i < Math.min(15, arrayData.length); i++) {
+                const row = arrayData[i];
+                if (!row || row.length === 0) continue;
+                let foundSpecialty = false, foundDoctor = false;
+                for (let j = 0; j < row.length; j++) {
+                    const cell = row[j] ? row[j].toString().toLowerCase().trim() : '';
+                    if (!foundSpecialty && specialtyKeywords.some(kw => cell.includes(kw))) {
+                        specialtyCol = j;
+                        foundSpecialty = true;
+                    }
+                    if (dateKeywords.some(kw => cell.includes(kw))) {
+                        dateCol = j;
+                    }
+                    if (!foundDoctor && doctorKeywords.some(kw => cell.includes(kw))) {
+                        doctorCol = j;
+                        foundDoctor = true;
+                    }
+                }
+                if (foundSpecialty && foundDoctor) {
+                    headerRow = i;
+                    break;
+                }
+            }
+            if (headerRow === -1 || specialtyCol === -1 || doctorCol === -1) {
+                throw new Error('❌ لم يتم العثور على صف العناوين');
+            }
+            const specialtySchedules = {};
+            let processedRows = 0;
+            for (let i = headerRow + 1; i < arrayData.length; i++) {
+                const row = arrayData[i];
+                if (!row || row.length === 0) continue;
+                let specialty = row[specialtyCol] ? row[specialtyCol].toString().trim() : '';
+                if (!specialty) continue;
+                specialty = normalizeSpecialty(specialty);
+                const dateValue = row[dateCol] ? row[dateCol].toString().trim() : '';
+                const dayNumber = extractDayFromDate(dateValue);
+                if (dayNumber === -1) continue;
+                const doctorName = row[doctorCol] ? row[doctorCol].toString().trim() : '';
+                if (!specialtySchedules[specialty]) {
+                    specialtySchedules[specialty] = {};
+                }
+                specialtySchedules[specialty][dayNumber] = doctorName;
+                processedRows++;
+            }
+            if (Object.keys(specialtySchedules).length === 0) {
+                throw new Error('❌ لم يتم العثور على بيانات صالحة');
+            }
+            return convertSchedulesToHorizontal(specialtySchedules);
+        }
+
+        function extractDayFromDate(dateValue) {
+            if (!dateValue) return -1;
+            const dateStr = dateValue.toString().trim();
+            let match = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (match) {
+                const year = parseInt(match[1]);
+                const month = parseInt(match[2]);
+                const day = parseInt(match[3]);
+                if (day >= 1 && day <= 31) {
+                    return day;
+                }
+            }
+            if (/^\d{1,2}$/.test(dateStr)) {
+                const day = parseInt(dateStr);
+                if (day >= 1 && day <= 31) {
+                    return day;
+                }
+            }
+            match = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (match) {
+                const day = parseInt(match[1]);
+                if (day >= 1 && day <= 31) {
+                    return day;
+                }
+            }
+            try {
+                const date = new Date(dateStr);
+                if (!isNaN(date.getTime())) {
+                    const day = date.getDate();
+                    if (day >= 1 && day <= 31) {
+                        return day;
+                    }
+                }
+            } catch (e) {}
+            return -1;
+        }
+
+        function convertSchedulesToHorizontal(specialtySchedules) {
+            const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+            const horizontalData = [];
+            console.log('🔄 تحويل إلى صيغة عرضية...');
+            for (const specialty in specialtySchedules) {
+                const row = [specialty];
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const doctorName = specialtySchedules[specialty][day] || '';
+                    row.push(doctorName);
+                }
+                horizontalData.push(row);
+            }
+            console.log('✅ تم التحويل بنجاح!');
+            console.log('📈 عدد التخصصات:', horizontalData.length);
+            return horizontalData;
+        }
+
+        function updateExistingScheduleData(convertedData) {
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('🔄 تحديث البيانات الموجودة...');
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            let updatedCount = 0;
+            let notFoundCount = 0;
+            const notFoundSpecialties = [];
+            for (let cloudRow of convertedData) {
+                const cloudSpecialty = cloudRow[0];
+                let foundRowIndex = -1;
+                for (let i = 4; i < data.length; i++) {
+                    const existingSpecialty = data[i][0];
+                    if (existingSpecialty.toLowerCase().trim() === cloudSpecialty.toLowerCase().trim()) {
+                        foundRowIndex = i;
+                        break;
+                    }
+                    if (normalizeSpecialty(existingSpecialty) === normalizeSpecialty(cloudSpecialty)) {
+                        foundRowIndex = i;
+                        break;
+                    }
+                    if (existingSpecialty.toLowerCase().includes(cloudSpecialty.toLowerCase()) ||
+                        cloudSpecialty.toLowerCase().includes(existingSpecialty.toLowerCase())) {
+                        foundRowIndex = i;
+                        break;
+                    }
+                }
+                if (foundRowIndex !== -1) {
+                    const existingSpecialtyName = data[foundRowIndex][0];
+                    for (let dayIndex = 1; dayIndex < cloudRow.length && dayIndex < data[foundRowIndex].length; dayIndex++) {
+                        const doctorName = cloudRow[dayIndex];
+                        if (doctorName) {
+                            data[foundRowIndex][dayIndex] = doctorName;
+                            if (!specialtyDoctors[existingSpecialtyName]) {
+                                specialtyDoctors[existingSpecialtyName] = [];
+                            }
+                            if (!specialtyDoctors[existingSpecialtyName].includes(doctorName) &&
+                                doctorName !== 'Not available' && 
+                                doctorName !== 'NMT' && 
+                                doctorName !== 'not applicable') {
+                                specialtyDoctors[existingSpecialtyName].push(doctorName);
+                                specialtyDoctors[existingSpecialtyName].sort();
+                            }
+                        }
+                    }
+                    updatedCount++;
+                    console.log(`✅ تم تحديث: ${existingSpecialtyName} ← من → ${cloudSpecialty}`);
+                } else {
+                    notFoundCount++;
+                    notFoundSpecialties.push(cloudSpecialty);
+                    console.log(`⚠️ لم يتم العثور على: ${cloudSpecialty}`);
+                }
+            }
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('📊 ملخص التحديث:');
+            console.log(`   ✅ تم التحديث: ${updatedCount} تخصص`);
+            console.log(`   ⚠️ لم يتم العثور عليه: ${notFoundCount} تخصص`);
+            if (notFoundSpecialties.length > 0) {
+                console.log('   📋 التخصصات غير الموجودة:', notFoundSpecialties.join(', '));
+            }
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            return updatedCount;
+        }
+
+        async function loadScheduleFromCloud() {
+            if (!window.firebaseReady) {
+                alert('⚠️ Firebase غير متصل!\nتحقق من الاتصال بالإنترنت');
+                return;
+            }
+            const cloudInfo = document.getElementById('cloudInfo');
+            cloudInfo.style.display = 'block';
+            cloudInfo.querySelector('#cloudInfoText').textContent = '⏳ جاري البحث في السحابة...';
+            try {
+                console.log(`🔍 البحث عن جداول: ${monthNames[currentMonth]} ${currentYear}`);
+                const schedulesRef = window.fbCollection(window.db, 'schedules');
+                const snapshot = await window.fbGetDocs(schedulesRef);
+                let foundSchedules = [];
+                snapshot.forEach((doc) => {
+                    const scheduleData = doc.data();
+                    const scheduleName = scheduleData.scheduleName || scheduleData.name || doc.id;
+                    const specialty = scheduleData.specialty || 'غير محدد';
+                    const scheduleMonth = parseInt(scheduleData.month) + 1;
+                    const scheduleYear = parseInt(scheduleData.year);
+                    if (scheduleMonth === currentMonth && scheduleYear === currentYear) {
+                        if (scheduleData.scheduleTable || scheduleData.rows) {
+                            foundSchedules.push({
+                                id: doc.id,
+                                name: scheduleName,
+                                specialty: specialty,
+                                data: scheduleData
+                            });
+                        }
+                    }
+                });
+                if (foundSchedules.length === 0) {
+                    throw new Error(`لم يتم العثور على جداول لشهر ${monthNames[currentMonth]} ${currentYear}`);
+                }
+                let selectedSchedule;
+                if (foundSchedules.length === 1) {
+                    selectedSchedule = foundSchedules[0].data;
+                } else {
+                    const options = foundSchedules.map((s, i) => 
+                        `${i + 1}. ${s.name} (${s.specialty})`
+                    ).join('\n');
+                    const choice = prompt(`تم العثور على ${foundSchedules.length} جداول:\n\n${options}\n\nأدخل رقم الجدول:`);
+                    if (!choice) {
+                        cloudInfo.style.display = 'none';
+                        return;
+                    }
+                    const index = parseInt(choice) - 1;
+                    if (index < 0 || index >= foundSchedules.length) {
+                        throw new Error('اختيار غير صحيح');
+                    }
+                    selectedSchedule = foundSchedules[index].data;
+                }
+                let cloudData = selectedSchedule.scheduleTable || selectedSchedule.rows;
+                if (!cloudData || cloudData.length === 0) {
+                    throw new Error('الجدول لا يحتوي على بيانات');
+                }
+                const convertedData = convertVerticalToHorizontal(cloudData, selectedSchedule);
+                let updatedCount = updateExistingScheduleData(convertedData);
+                buildSpecialtyDoctors();
+                buildTable();
+                const scheduleName = selectedSchedule.scheduleName || selectedSchedule.name || 'الجدول';
+                cloudInfo.querySelector('#cloudInfoText').innerHTML = `
+                    ✅ تم التحميل بنجاح!<br>
+                    📋 ${scheduleName}<br>
+                    📅 ${monthNames[currentMonth]} ${currentYear}<br>
+                    🔄 تم تحديث ${updatedCount} تخصص
+                `;
+                setTimeout(() => cloudInfo.style.display = 'none', 5000);
+                alert(`✅ تم تحديث الجدول بنجاح!\n\n📋 ${scheduleName}\n📅 ${monthNames[currentMonth]} ${currentYear}\n🔄 تم تحديث ${updatedCount} تخصص`);
+                autoSave();
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                cloudInfo.querySelector('#cloudInfoText').innerHTML = `⚠️ خطأ في التحميل<br>${error.message}`;
+                alert('❌ حدث خطأ:\n\n' + error.message);
+            }
+        }
+
+        async function showAllSchedules() {
+            if (!window.firebaseReady) {
+                alert('⚠️ Firebase غير متصل!');
+                return;
+            }
+            const modal = document.getElementById('allSchedulesModal');
+            const listDiv = document.getElementById('allSchedulesList');
+            modal.style.display = 'block';
+            listDiv.innerHTML = '<p style="text-align: center; color: #666;">⏳ جاري التحميل...</p>';
+            try {
+                const schedulesRef = window.fbCollection(window.db, 'schedules');
+                const snapshot = await window.fbGetDocs(schedulesRef);
+                let allSchedules = [];
+                snapshot.forEach((doc) => {
+                    const scheduleData = doc.data();
+                    const scheduleName = scheduleData.scheduleName || scheduleData.name || doc.id;
+                    const specialty = scheduleData.specialty || 'غير محدد';
+                    const scheduleMonth = parseInt(scheduleData.month) + 1;
+                    const scheduleYear = parseInt(scheduleData.year);
+                    if (scheduleData.scheduleTable || scheduleData.rows) {
+                        allSchedules.push({
+                            id: doc.id,
+                            name: scheduleName,
+                            specialty: specialty,
+                            month: scheduleMonth,
+                            year: scheduleYear,
+                            data: scheduleData
+                        });
+                    }
+                });
+                if (allSchedules.length === 0) {
+                    listDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            <div style="font-size: 3em; margin-bottom: 15px;">📭</div>
+                            <p>لا يوجد جداول محفوظة</p>
+                        </div>
+                    `;
+                    return;
+                }
+                allSchedules.sort((a, b) => {
+                    if (a.year !== b.year) return b.year - a.year;
+                    return b.month - a.month;
+                });
+                let html = '<div style="display: grid; gap: 15px;">';
+                allSchedules.forEach((schedule) => {
+                    const monthName = monthNames[schedule.month] || schedule.month;
+                    html += `
+                        <div style="
+                            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+                            padding: 20px;
+                            border-radius: 12px;
+                            border-right: 5px solid #667eea;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        "
+                        onclick="loadSpecificSchedule('${schedule.id}')">
+                            <h3 style="color: #667eea;">📋 ${schedule.name}</h3>
+                            <p style="color: #666;">🏥 ${schedule.specialty}</p>
+                            <p style="color: #888;">📅 ${monthName} ${schedule.year}</p>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                listDiv.innerHTML = html;
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                listDiv.innerHTML = `<div style="text-align: center; color: #f44336;">⚠️ ${error.message}</div>`;
+            }
+        }
+
+        async function loadSpecificSchedule(scheduleId) {
+            if (!window.firebaseReady) {
+                alert('⚠️ Firebase غير متصل!');
+                return;
+            }
+            closeModal();
+            const cloudInfo = document.getElementById('cloudInfo');
+            cloudInfo.style.display = 'block';
+            cloudInfo.querySelector('#cloudInfoText').textContent = '⏳ جاري تحميل الجدول...';
+            try {
+                const schedulesRef = window.fbCollection(window.db, 'schedules');
+                const snapshot = await window.fbGetDocs(schedulesRef);
+                let selectedSchedule = null;
+                snapshot.forEach((doc) => {
+                    if (doc.id === scheduleId) {
+                        selectedSchedule = doc.data();
+                    }
+                });
+                if (!selectedSchedule) {
+                    throw new Error('الجدول غير موجود');
+                }
+                let cloudData = null;
+                if (selectedSchedule.scheduleTable && selectedSchedule.scheduleTable.length > 0) {
+                    cloudData = selectedSchedule.scheduleTable;
+                } else if (selectedSchedule.rows && selectedSchedule.rows.length > 0) {
+                    cloudData = selectedSchedule.rows;
+                } else {
+                    for (const key in selectedSchedule) {
+                        if (Array.isArray(selectedSchedule[key]) && selectedSchedule[key].length > 0) {
+                            cloudData = selectedSchedule[key];
+                            break;
+                        }
+                    }
+                }
+                if (!cloudData || cloudData.length === 0) {
+                    throw new Error('الجدول لا يحتوي على بيانات');
+                }
+                const originalMonth = parseInt(selectedSchedule.month);
+                currentMonth = originalMonth + 1;
+                currentYear = parseInt(selectedSchedule.year);
+                document.getElementById('monthSelector').value = currentMonth;
+                const convertedData = convertVerticalToHorizontal(cloudData, selectedSchedule);
+                let updatedCount = updateExistingScheduleData(convertedData);
+                changeMonth();
+                buildSpecialtyDoctors();
+                buildTable();
+                const scheduleName = selectedSchedule.scheduleName || selectedSchedule.name || 'الجدول';
+                cloudInfo.querySelector('#cloudInfoText').innerHTML = `
+                    ✅ تم التحميل بنجاح!<br>
+                    📋 ${scheduleName}<br>
+                    📅 ${monthNames[currentMonth]} ${currentYear}<br>
+                    📊 ${convertedData.length} تخصص
+                `;
+                setTimeout(() => cloudInfo.style.display = 'none', 5000);
+                alert(`✅ تم تحديث الجدول!\n\n📋 ${scheduleName}\n📅 ${monthNames[currentMonth]} ${currentYear}\n🔄 تم تحديث ${updatedCount} تخصص`);
+                autoSave();
+            } catch (error) {
+                console.error('❌ خطأ:', error);
+                cloudInfo.querySelector('#cloudInfoText').innerHTML = `⚠️ خطأ<br>${error.message}`;
+                alert('❌ حدث خطأ:\n\n' + error.message);
+            }
+        }
+
+        async function loadCloudDataForSpecialty(rowIndex, specialtyName) {
+            if (!window.firebaseReady) {
+                alert('Firebase غير متصل!');
+                return;
+            }
+            try {
+                console.log('البحث عن جداول لتخصص: ' + specialtyName);
+                const schedulesRef = window.fbCollection(window.db, 'schedules');
+                const snapshot = await window.fbGetDocs(schedulesRef);
+                let availableSchedules = [];
+                snapshot.forEach((doc) => {
+                    const scheduleData = doc.data();
+                    if (scheduleData.scheduleTable || scheduleData.rows) {
+                        const scheduleName = scheduleData.scheduleName || scheduleData.name || doc.id;
+                        const specialty = scheduleData.specialty || 'غير محدد';
+                        const scheduleMonth = parseInt(scheduleData.month) + 1;
+                        const scheduleYear = parseInt(scheduleData.year);
+                        availableSchedules.push({
+                            id: doc.id,
+                            name: scheduleName,
+                            specialty: specialty,
+                            month: scheduleMonth,
+                            year: scheduleYear,
+                            monthName: monthNames[scheduleMonth],
+                            data: scheduleData
+                        });
+                    }
+                });
+                if (availableSchedules.length === 0) {
+                    alert('لا توجد جداول محفوظة في السحابة');
+                    return;
+                }
+                availableSchedules.sort((a, b) => {
+                    if (a.year !== b.year) return b.year - a.year;
+                    return b.month - a.month;
+                });
+                let optionsText = 'الجداول المتاحة في السحابة:\n\n';
+                availableSchedules.forEach((s, i) => {
+                    optionsText += (i + 1) + '. ' + s.name + ' (' + s.specialty + ') - ' + s.monthName + ' ' + s.year + '\n';
+                });
+                optionsText += '\nأدخل رقم الجدول لتحميله في تخصص "' + specialtyName + '":';
+                const choice = prompt(optionsText);
+                if (!choice) return;
+                const index = parseInt(choice) - 1;
+                if (index < 0 || index >= availableSchedules.length || isNaN(index)) {
+                    alert('اختيار غير صحيح');
+                    return;
+                }
+                const selectedSchedule = availableSchedules[index].data;
+                let cloudData = selectedSchedule.scheduleTable || selectedSchedule.rows;
+                if (!cloudData || cloudData.length === 0) {
+                    alert('الجدول المختار لا يحتوي على بيانات');
+                    return;
+                }
+                console.log('تحويل البيانات...');
+                const convertedData = convertVerticalToHorizontal(cloudData, selectedSchedule);
+                if (!convertedData || convertedData.length === 0) {
+                    alert('فشل تحويل البيانات');
+                    return;
+                }
+                const firstCloudSpecialty = convertedData[0];
+                if (!firstCloudSpecialty || firstCloudSpecialty.length < 2) {
+                    alert('البيانات غير صالحة');
+                    return;
+                }
+                const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+                const originalSpecialtyName = data[rowIndex][0];
+                let updatedDays = 0;
+                for (let dayIndex = 1; dayIndex <= daysInMonth; dayIndex++) {
+                    if (dayIndex < firstCloudSpecialty.length) {
+                        const doctorName = firstCloudSpecialty[dayIndex] || '';
+                        data[rowIndex][dayIndex] = doctorName;
+                        if (doctorName) {
+                            updatedDays++;
+                            if (!specialtyDoctors[originalSpecialtyName]) {
+                                specialtyDoctors[originalSpecialtyName] = [];
+                            }
+                            if (!specialtyDoctors[originalSpecialtyName].includes(doctorName) &&
+                                doctorName !== 'Not available' && 
+                                doctorName !== 'NMT' && 
+                                doctorName !== 'not applicable') {
+                                specialtyDoctors[originalSpecialtyName].push(doctorName);
+                                specialtyDoctors[originalSpecialtyName].sort();
+                            }
+                        }
+                    }
+                }
+                buildTable();
+                autoSave();
+                const scheduleName = selectedSchedule.scheduleName || selectedSchedule.name || 'الجدول';
+                alert(
+                    'تم تحميل البيانات بنجاح!\n\n' +
+                    'من: ' + scheduleName + '\n' +
+                    'إلى: ' + originalSpecialtyName + '\n' +
+                    'تم تحديث: ' + updatedDays + ' يوم'
+                );
+                console.log('تم تحميل ' + updatedDays + ' يوم لتخصص ' + originalSpecialtyName);
+            } catch (error) {
+                console.error('خطأ:', error);
+                alert('حدث خطأ:\n\n' + error.message);
+            }
+        }
+
+        function saveData() {
+            try {
+                const saveObject = {
+                    data: data,
+                    specialtyDoctors: specialtyDoctors,
+                    currentMonth: currentMonth,
+                    currentYear: currentYear,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('scheduleData', JSON.stringify(saveObject));
+                alert('✅ تم حفظ البيانات بنجاح!');
+                showSaveStatus();
+            } catch (error) {
+                alert('❌ حدث خطأ أثناء الحفظ: ' + error.message);
+            }
+        }
+
+        function loadSavedData() {
+            try {
+                const savedData = localStorage.getItem('scheduleData');
+                if (savedData) {
+                    const saveObject = JSON.parse(savedData);
+                    data = saveObject.data;
+                    specialtyDoctors = saveObject.specialtyDoctors;
+                    currentMonth = saveObject.currentMonth || 10;
+                    currentYear = saveObject.currentYear || 2025;
+                    document.getElementById('monthSelector').value = currentMonth;
+                    document.getElementById('headerTitle').textContent = 
+                        `جدول التخصصات المناوبة لشهر ${monthNames[currentMonth]} ${currentYear}`;
+                    console.log('✅ تم تحميل البيانات المحفوظة');
+                    setTimeout(() => {
+                        const saveDate = new Date(saveObject.timestamp);
+                        const statusDiv = document.getElementById('saveStatus');
+                        if (statusDiv) {
+                            statusDiv.textContent = `✅ تم استرجاع البيانات - ${saveDate.toLocaleString('ar-SA')}`;
+                            statusDiv.style.color = '#4caf50';
+                        }
+                    }, 500);
+                    return true;
+                }
+            } catch (error) {
+                console.error('خطأ في تحميل البيانات:', error);
+            }
+            return false;
+        }
+
+        function clearSavedData() {
+            if (confirm('⚠️ هل أنت متأكد من إعادة تعيين الجدول؟\nسيتم مسح جميع البيانات وتفريغ كل الخلايا.')) {
+                for (let rowIndex = 4; rowIndex < data.length; rowIndex++) {
+                    for (let colIndex = 1; colIndex < data[rowIndex].length; colIndex++) {
+                        data[rowIndex][colIndex] = '';
+                    }
+                }
+                Object.keys(specialtyDoctors).forEach(specialty => {
+                    specialtyDoctors[specialty] = [];
+                });
+                localStorage.removeItem('scheduleData');
+                buildTable();
+                const statusDiv = document.getElementById('saveStatus');
+                if (statusDiv) {
+                    statusDiv.textContent = '🗑️ تم تفريغ الجدول';
+                    statusDiv.style.color = '#f44336';
+                }
+                alert('✅ تم إعادة تعيين الجدول بنجاح!');
+            }
+        }
+
+        function autoSave() {
+            try {
+                const saveObject = {
+                    data: data,
+                    specialtyDoctors: specialtyDoctors,
+                    currentMonth: currentMonth,
+                    currentYear: currentYear,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('scheduleData', JSON.stringify(saveObject));
+                console.log('💾 حفظ تلقائي:', new Date().toLocaleTimeString('ar-SA'));
+                const statusDiv = document.getElementById('saveStatus');
+                if (statusDiv) {
+                    statusDiv.textContent = `💾 تم الحفظ: ${new Date().toLocaleTimeString('ar-SA')}`;
+                    statusDiv.style.color = '#4caf50';
+                    setTimeout(() => {
+                        statusDiv.style.opacity = '0.6';
+                    }, 3000);
+                }
+            } catch (error) {
+                console.error('خطأ في الحفظ التلقائي:', error);
+            }
+        }
+
+        function showSaveStatus() {
+            const savedData = localStorage.getItem('scheduleData');
+            if (savedData) {
+                const saveObject = JSON.parse(savedData);
+                const saveDate = new Date(saveObject.timestamp);
+                const statusDiv = document.getElementById('saveStatus');
+                if (statusDiv) {
+                    statusDiv.textContent = `آخر حفظ: ${saveDate.toLocaleString('ar-SA')}`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
